@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Igodomigodo Security Network</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14110D; --ink-soft:#2A241C; --parchment:#F3EEE2; --parchment-dim:#E8E1D2;
+    --white:#FDFBF6; --forest:#1B5E44; --gold:#B8862E; --gold-bright:#D4A245;
+    --maroon:#7A2222; --line:rgba(20,17,13,0.14); --line-dark:rgba(243,238,226,0.16);
+    --serif:'Fraunces', serif; --sans:'Work Sans', sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:var(--sans);background:var(--parchment);color:var(--ink);line-height:1.6;}
+  a{color:inherit;text-decoration:none;} ul{list-style:none;} img{max-width:100%;display:block;}
+  .wrap{width:100%;max-width:1180px;margin:0 auto;padding:0 24px;}
+  h1,h2,h3,h4{font-family:var(--serif);font-weight:500;letter-spacing:-0.01em;line-height:1.15;}
+
+  #loginGate{position:fixed;inset:0;background:var(--ink);z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px;}
+  .login-card{background:var(--white);padding:44px 40px;max-width:420px;width:100%;border:1px solid var(--line);}
+  .login-card h1{font-size:24px;margin-bottom:8px;}
+  .login-card p{font-size:13.5px;color:var(--ink-soft);margin-bottom:24px;}
+  .login-card input{width:100%;padding:14px 16px;border:1px solid var(--line);font-family:var(--sans);font-size:15px;margin-bottom:14px;outline:none;}
+  .login-card input:focus{border-color:var(--forest);}
+  .login-card button{width:100%;padding:14px;background:var(--forest);color:var(--white);border:none;font-family:var(--sans);font-weight:600;font-size:15px;cursor:pointer;}
+  .login-card button:hover{background:var(--ink);}
+  .login-error{color:var(--maroon);font-size:13px;margin-bottom:10px;display:none;}
+  .login-error.show{display:block;}
+
+  .admin-header{background:var(--ink);color:var(--parchment);padding:22px 0;position:sticky;top:0;z-index:100;}
+  .admin-header .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+  .admin-header h1{font-size:20px;color:var(--white);}
+  .admin-header h1 span{display:block;font-family:var(--sans);font-size:11px;letter-spacing:0.12em;color:var(--gold-bright);margin-top:2px;font-weight:600;}
+  .admin-header .actions{display:flex;gap:12px;align-items:center;}
+  .admin-header a, .admin-header button{font-family:var(--sans);font-size:13.5px;font-weight:600;padding:10px 16px;border:1px solid var(--line-dark);color:var(--parchment);background:transparent;cursor:pointer;transition:all .2s ease;}
+  .admin-header a:hover, .admin-header button:hover{border-color:var(--gold-bright);color:var(--gold-bright);}
+
+  .tabs{background:var(--white);border-bottom:1px solid var(--line);position:sticky;top:78px;z-index:99;}
+  .tabs .wrap{display:flex;gap:0;overflow-x:auto;}
+  .tab-btn{background:transparent;border:none;border-bottom:3px solid transparent;font-family:var(--sans);font-size:14px;font-weight:600;padding:16px 22px;cursor:pointer;color:var(--ink-soft);white-space:nowrap;transition:all .2s ease;position:relative;display:inline-flex;align-items:center;gap:8px;}
+  .tab-btn:hover{color:var(--ink);}
+  .tab-btn.active{color:var(--forest);border-bottom-color:var(--forest);}
+  .badge{background:var(--maroon);color:var(--white);font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;line-height:1.4;display:none;}
+  .badge.show{display:inline-block;}
+
+  .panel{display:none;padding:40px 0 80px;}
+  .panel.active{display:block;}
+  .panel h2{font-size:24px;margin-bottom:6px;}
+  .panel > .wrap > p.lead{font-size:14px;color:var(--ink-soft);margin-bottom:30px;max-width:56em;}
+
+  .card{background:var(--white);border:1px solid var(--line);padding:26px 28px;margin-bottom:16px;}
+  .card h3{font-size:15px;font-family:var(--sans);font-weight:600;margin-bottom:16px;color:var(--forest);}
+
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;}
+  .field input, .field textarea, .field select{width:100%;padding:12px 14px;border:1px solid var(--line);font-family:var(--sans);font-size:14px;background:var(--white);color:var(--ink);outline:none;transition:border-color .2s ease;}
+  .field input:focus, .field textarea:focus, .field select:focus{border-color:var(--forest);}
+  .field textarea{resize:vertical;min-height:90px;font-family:var(--sans);}
+  .field .hint{font-size:12px;color:var(--ink-soft);margin-top:5px;font-style:italic;}
+
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+
+  .btn{font-family:var(--sans);font-weight:600;font-size:13.5px;padding:11px 20px;border:1px solid transparent;cursor:pointer;display:inline-block;transition:all .2s ease;}
+  .btn-primary{background:var(--forest);color:var(--white);}
+  .btn-primary:hover{background:var(--ink);}
+  .btn-primary:disabled{opacity:0.7;cursor:wait;}
+  .btn-ghost{background:transparent;border-color:var(--line);color:var(--ink);}
+  .btn-ghost:hover{border-color:var(--forest);color:var(--forest);}
+  .btn-danger{background:transparent;border-color:var(--maroon);color:var(--maroon);}
+  .btn-danger:hover{background:var(--maroon);color:var(--white);}
+  .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;}
+
+  .item-row{display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:center;padding:16px 0;border-bottom:1px solid var(--line);}
+  .item-row:last-child{border-bottom:none;}
+  .item-preview{width:80px;height:80px;object-fit:cover;border:1px solid var(--line);}
+  .item-body h4{font-family:var(--sans);font-size:15px;font-weight:600;margin-bottom:4px;}
+  .item-body p{font-size:13px;color:var(--ink-soft);}
+
+  .progress-wrap{display:none;margin-top:10px;}
+  .progress-wrap.show{display:block;}
+  .progress-bar{height:6px;background:var(--parchment-dim);border-radius:3px;overflow:hidden;}
+  .progress-fill{height:100%;width:0%;background:var(--forest);transition:width .2s ease;}
+  .progress-text{font-size:12px;color:var(--ink-soft);margin-top:6px;font-weight:500;}
+
+  .toast{position:fixed;bottom:24px;right:24px;background:var(--forest);color:var(--white);padding:14px 22px;font-size:14px;font-weight:500;border-radius:2px;transform:translateY(120%);transition:transform .35s ease;z-index:2000;max-width:340px;}
+  .toast.show{transform:translateY(0);}
+  .toast.error{background:var(--maroon);}
+
+  .empty{text-align:center;padding:40px 20px;color:var(--ink-soft);font-size:14px;font-style:italic;}
+
+  /* MESSAGES */
+  .panel-head-row{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:6px;flex-wrap:wrap;}
+  .panel-head-row .lead{margin-bottom:24px;}
+  .panel-head-row .btn{flex-shrink:0;}
+
+  .msg-list{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);}
+  .msg-row{background:var(--white);padding:0;overflow:hidden;position:relative;}
+  .msg-row.unread{background:#FDFBF6;}
+  .msg-row.unread::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--maroon);}
+  .msg-head{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:start;padding:20px 26px 20px 30px;cursor:pointer;transition:background .2s ease;}
+  .msg-head:hover{background:var(--parchment-dim);}
+  .msg-meta{font-size:12px;color:var(--forest);font-weight:600;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:6px;}
+  .msg-row.unread .msg-meta{color:var(--maroon);}
+  .msg-name{font-family:var(--sans);font-size:16px;font-weight:600;color:var(--ink);margin-bottom:2px;}
+  .msg-email{font-size:13px;color:var(--ink-soft);margin-bottom:10px;}
+  .msg-subject{font-family:var(--sans);font-size:14px;font-weight:600;color:var(--ink);margin-bottom:6px;}
+  .msg-preview{font-size:13.5px;color:var(--ink-soft);line-height:1.55;max-width:60em;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+  .msg-row.unread .msg-preview{color:var(--ink);}
+  .msg-actions{display:flex;gap:8px;flex-shrink:0;flex-direction:column;align-items:stretch;}
+  .msg-actions .btn{padding:7px 14px;font-size:12.5px;white-space:nowrap;text-align:center;}
+
+  .msg-full{max-height:0;overflow:hidden;transition:max-height .4s ease;background:var(--parchment-dim);}
+  .msg-full-inner{padding:22px 30px 28px;border-top:1px solid var(--line);}
+  .msg-full-inner .msg-label{font-size:11px;font-weight:700;color:var(--forest);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;margin-top:14px;}
+  .msg-full-inner .msg-label:first-child{margin-top:0;}
+  .msg-full-inner .msg-value{font-size:14.5px;color:var(--ink);line-height:1.6;white-space:pre-wrap;word-break:break-word;}
+  .msg-full-inner .msg-value a{color:var(--forest);text-decoration:underline;}
+  .msg-full-inner .msg-value a:hover{color:var(--maroon);}
+  .msg-row.open .msg-full{max-height:1500px;}
+
+  .msg-filter{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
+  .msg-filter button{background:transparent;border:1px solid var(--line);font-family:var(--sans);font-size:13px;font-weight:600;padding:8px 16px;cursor:pointer;color:var(--ink-soft);transition:all .2s ease;}
+  .msg-filter button:hover{border-color:var(--forest);color:var(--forest);}
+  .msg-filter button.active{background:var(--forest);color:var(--white);border-color:var(--forest);}
+
+  @media (max-width: 720px){
+    .grid-2, .grid-3{grid-template-columns:1fr;}
+    .item-row{grid-template-columns:1fr;}
+    .item-preview{width:100%;height:180px;}
+    .tabs{top:110px;}
+    .msg-head{grid-template-columns:1fr;padding:18px 20px 18px 24px;}
+    .msg-actions{flex-direction:row;flex-wrap:wrap;}
+    .msg-full-inner{padding:18px 22px;}
+  }
+</style>
+</head>
+<body>
+
+<div id="loginGate">
+  <div class="login-card">
+    <h1>Admin access</h1>
+    <p>Enter the admin password to manage site content.</p>
+    <div class="login-error" id="loginError">Incorrect password. Try again.</div>
+    <input type="password" id="loginPass" placeholder="Password" autofocus>
+    <button id="loginBtn" type="button">Unlock admin panel</button>
+  </div>
+</div>
+
+<div id="adminShell" style="display:none;">
+  <header class="admin-header">
+    <div class="wrap">
+      <h1>Admin Panel<span>IGODOMIGODO SECURITY NETWORK</span></h1>
+      <div class="actions">
+        <a href="index.html" target="_blank">View site ↗</a>
+        <button id="logoutBtn">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <div class="wrap">
+      <button class="tab-btn active" data-tab="stats">Home Stats</button>
+      <button class="tab-btn" data-tab="coverage">Coverage</button>
+      <button class="tab-btn" data-tab="gallery">Gallery</button>
+      <button class="tab-btn" data-tab="articles">News / Articles</button>
+      <button class="tab-btn" data-tab="messages">Messages <span class="badge" id="msgBadge">0</span></button>
+    </div>
+  </nav>
+
+  <section class="panel active" id="panel-stats">
+    <div class="wrap">
+      <h2>Home page stats</h2>
+      <p class="lead">These are the four big numbers under the homepage hero.</p>
+      <div id="statsList"></div>
+      <div class="card" style="margin-top:24px;">
+        <h3>Add a new stat</h3>
+        <form id="statForm">
+          <div class="grid-3">
+            <div class="field"><label>Number</label><input type="text" id="statNum" placeholder="e.g. 24"></div>
+            <div class="field"><label>Suffix (optional)</label><input type="text" id="statSuffix" placeholder="e.g. /7"></div>
+            <div class="field"><label>Order</label><input type="number" id="statOrder" placeholder="1"></div>
+          </div>
+          <div class="field"><label>Label</label><input type="text" id="statLabel" placeholder="e.g. Service families across risk, technology and training"></div>
+          <div class="btn-row"><button type="submit" class="btn btn-primary">Add stat</button></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-coverage">
+    <div class="wrap">
+      <h2>Coverage</h2>
+      <p class="lead">Manage the LGA area cards. (The "Included asset classes" list on the coverage page is hardcoded.)</p>
+      <div class="card">
+        <h3>Coverage areas (LGA cards)</h3>
+        <div id="areasList"></div>
+        <form id="areaForm" style="margin-top:18px;border-top:1px solid var(--line);padding-top:18px;">
+          <div class="grid-3">
+            <div class="field"><label>Count</label><input type="text" id="areaCount" placeholder="e.g. 6 or —"></div>
+            <div class="field"><label>Name</label><input type="text" id="areaName" placeholder="e.g. Ikpoba-Okha"></div>
+            <div class="field"><label>Order</label><input type="number" id="areaOrder" placeholder="1"></div>
+          </div>
+          <div class="field"><label>Note</label><input type="text" id="areaNote" placeholder="e.g. Profiled assets in this LGA"></div>
+          <div class="btn-row"><button type="submit" class="btn btn-primary">Add area</button></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-gallery">
+    <div class="wrap">
+      <h2>Gallery</h2>
+      <p class="lead">Images are compressed in the browser before upload — a 5 MB photo usually becomes 600 KB to 1 MB at near-original quality.</p>
+      <div class="card">
+        <h3>Add gallery image</h3>
+        <form id="galleryForm">
+          <div class="grid-2">
+            <div class="field"><label>Image URL</label><input type="url" id="galleryUrl" placeholder="https://example.com/photo.jpg"></div>
+            <div class="field">
+              <label>Or upload a file (max 5 MB)</label>
+              <input type="file" id="galleryFile" accept="image/*">
+              <div class="hint">Large photos are automatically shrunk before upload.</div>
+            </div>
+          </div>
+          <div class="grid-3">
+            <div class="field"><label>Caption</label><input type="text" id="galleryCaption" placeholder="e.g. Riverine patrol"></div>
+            <div class="field">
+              <label>Category</label>
+              <select id="galleryCategory">
+                <option value="uniforms">Uniforms</option>
+                <option value="operations">Operations</option>
+                <option value="community">Community</option>
+                <option value="equipment">Equipment</option>
+              </select>
+            </div>
+            <div class="field"><label>Order</label><input type="number" id="galleryOrder" placeholder="1"></div>
+          </div>
+          <div class="progress-wrap" id="galleryProgress">
+            <div class="progress-bar"><div class="progress-fill" id="galleryProgressFill"></div></div>
+            <div class="progress-text" id="galleryProgressText">Preparing…</div>
+          </div>
+          <div class="btn-row"><button type="submit" class="btn btn-primary" id="gallerySubmitBtn">Add image</button></div>
+        </form>
+      </div>
+      <div class="card">
+        <h3>Existing images</h3>
+        <div id="galleryList"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-articles">
+    <div class="wrap">
+      <h2>News / Articles</h2>
+      <p class="lead">Write articles with a date, tag, thumbnail and full body.</p>
+      <div class="card">
+        <h3>Add article</h3>
+        <form id="articleForm">
+          <div class="grid-2">
+            <div class="field"><label>Date (display)</label><input type="text" id="articleDate" placeholder="e.g. Aug 2026"></div>
+            <div class="field"><label>Tag</label><input type="text" id="articleTag" placeholder="e.g. Announcement"></div>
+          </div>
+          <div class="field"><label>Title</label><input type="text" id="articleTitle" placeholder="Headline of the article"></div>
+          <div class="field"><label>Summary (short teaser)</label><textarea id="articleSummary" placeholder="One or two sentences."></textarea></div>
+          <div class="field"><label>Full body (shown when clicked)</label><textarea id="articleBody" style="min-height:180px;" placeholder="Full article text. Blank lines become paragraphs."></textarea></div>
+          <div class="grid-2">
+            <div class="field"><label>Thumbnail URL</label><input type="url" id="articleThumb" placeholder="https://example.com/thumb.jpg"></div>
+            <div class="field">
+              <label>Or upload a thumbnail (max 5 MB)</label>
+              <input type="file" id="articleThumbFile" accept="image/*">
+              <div class="hint">Auto-compressed before upload.</div>
+            </div>
+          </div>
+          <div class="field"><label>Order</label><input type="number" id="articleOrder" placeholder="1"></div>
+          <div class="progress-wrap" id="articleProgress">
+            <div class="progress-bar"><div class="progress-fill" id="articleProgressFill"></div></div>
+            <div class="progress-text" id="articleProgressText">Preparing…</div>
+          </div>
+          <div class="btn-row"><button type="submit" class="btn btn-primary" id="articleSubmitBtn">Publish article</button></div>
+        </form>
+      </div>
+      <div class="card">
+        <h3>Existing articles</h3>
+        <div id="articlesList"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-messages">
+    <div class="wrap">
+      <div class="panel-head-row">
+        <div>
+          <h2>Messages</h2>
+          <p class="lead">Enquiries submitted through the Contact page. Click any message to expand it.</p>
+        </div>
+        <button class="btn btn-primary" id="msgRefreshBtn" type="button">Refresh messages</button>
+      </div>
+
+      <div class="msg-filter">
+        <button class="active" data-filter="all" type="button">All</button>
+        <button data-filter="unread" type="button">Unread</button>
+        <button data-filter="read" type="button">Read</button>
+      </div>
+
+      <div class="msg-list" id="msgList">
+        <div class="empty">Loading messages…</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-storage-compat.js"></script>
+
+<script>
+/* ============================================================
+   CONFIG
+   ============================================================ */
+const firebaseConfig = {
+  apiKey: "AIzaSyCxsU8TQ0xI67ZZOYDqf9_H8UyoBvgJ7pQ",
+  authDomain: "security-f325d.firebaseapp.com",
+  projectId: "security-f325d",
+  storageBucket: "security-f325d.firebasestorage.app",
+  messagingSenderId: "421538949121",
+  appId: "1:421538949121:web:eb9aa79d286b2d6d2f7800"
+};
+
+const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
+const IMAGE_MAX_DIM = 1920;
+const IMAGE_QUALITY  = 0.88;
+
+let db = null;
+let storage = null;
+let firebaseReady = false;
+
+try {
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.firestore();
+  storage = firebase.storage();
+  firebaseReady = true;
+  console.log('[admin] Firebase initialized');
+} catch(e){
+  console.error('[admin] Firebase init failed:', e);
+}
+
+/* ============================================================
+   AUTH GATE
+   ============================================================ */
+const ADMIN_PASSWORD = "Benjamin1.com";
+const AUTH_KEY = "isn-admin-authed";
+
+const loginGate  = document.getElementById('loginGate');
+const adminShell = document.getElementById('adminShell');
+const loginError = document.getElementById('loginError');
+
+function unlock(){
+  loginGate.style.display = 'none';
+  adminShell.style.display = 'block';
+  console.log('[admin] Unlocked, loading all data…');
+  if (firebaseReady) {
+    loadAll();
+  } else {
+    const msg = 'Firebase failed to initialize. Check your internet connection and reload the page.';
+    ['statsList','areasList','galleryList','articlesList','msgList'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = '<div class="empty" style="color:var(--maroon);">' + msg + '</div>';
+    });
+  }
+}
+
+if (sessionStorage.getItem(AUTH_KEY) === 'yes') unlock();
+
+document.getElementById('loginBtn').addEventListener('click', () => {
+  const val = document.getElementById('loginPass').value;
+  if (val === ADMIN_PASSWORD) { sessionStorage.setItem(AUTH_KEY, 'yes'); unlock(); }
+  else {
+    loginError.textContent = 'Incorrect password. Try again.';
+    loginError.classList.add('show');
+  }
+});
+document.getElementById('loginPass').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('loginBtn').click();
+});
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  sessionStorage.removeItem(AUTH_KEY); location.reload();
+});
+
+/* ============================================================
+   TABS
+   ============================================================ */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+const toast = document.getElementById('toast');
+let toastTimer;
+function notify(msg, isError=false){
+  toast.textContent = msg;
+  toast.classList.toggle('error', isError);
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 3200);
+}
+
+/* ============================================================
+   FETCH HELPER
+   ============================================================ */
+async function fetchAll(collectionName){
+  const snap = await db.collection(collectionName).get();
+  const items = [];
+  snap.forEach(d => items.push(Object.assign({ id: d.id }, d.data())));
+  items.sort((a, b) => {
+    const ao = (typeof a.order === 'number') ? a.order : 9999;
+    const bo = (typeof b.order === 'number') ? b.order : 9999;
+    return ao - bo;
+  });
+  return items;
+}
+
+/* ============================================================
+   LOAD ALL — includes loadMessages
+   ============================================================ */
+async function loadAll(){
+  console.log('[admin] loadAll start');
+  await Promise.all([loadStats(), loadAreas(), loadGallery(), loadArticles(), loadMessages()]);
+  console.log('[admin] loadAll complete');
+}
+
+/* ============================================================
+   STATS
+   ============================================================ */
+const statsList = document.getElementById('statsList');
+
+async function loadStats(){
+  statsList.innerHTML = '<div class="empty">Loading…</div>';
+  try {
+    const items = await fetchAll('stats');
+    if (items.length === 0){ statsList.innerHTML = '<div class="empty">No stats yet — add one below.</div>'; return; }
+    statsList.innerHTML = '';
+    items.forEach(s => statsList.appendChild(statRow(s.id, s)));
+  } catch(e){ statsList.innerHTML = '<div class="empty">Error loading stats: ' + e.message + '</div>'; }
+}
+
+function statRow(id, data){
+  const div = document.createElement('div');
+  div.className = 'item-row';
+  div.innerHTML = `
+    <div style="font-family:var(--serif);font-size:28px;color:var(--forest);min-width:70px;">${data.num || 0}${data.suffix || ''}</div>
+    <div class="item-body">
+      <h4>${escapeHtml(data.label || '')}</h4>
+      <p>order: ${data.order ?? '—'}</p>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" data-act="edit">Edit</button>
+      <button class="btn btn-danger" data-act="del">Delete</button>
+    </div>`;
+  div.querySelector('[data-act="edit"]').addEventListener('click', () => editStat(id, data));
+  div.querySelector('[data-act="del"]').addEventListener('click', () => delDoc('stats', id, loadStats, div));
+  return div;
+}
+
+async function editStat(id, data){
+  const num = prompt('Number:', data.num ?? ''); if (num === null) return;
+  const suffix = prompt('Suffix (e.g. /7, leave blank for none):', data.suffix ?? ''); if (suffix === null) return;
+  const label = prompt('Label:', data.label ?? ''); if (label === null) return;
+  const order = prompt('Order:', data.order ?? ''); if (order === null) return;
+  await db.collection('stats').doc(id).update({ num, suffix, label, order: parseInt(order) || 0 });
+  notify('Stat updated'); loadStats();
+}
+
+document.getElementById('statForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const data = {
+    num: document.getElementById('statNum').value.trim(),
+    suffix: document.getElementById('statSuffix').value.trim(),
+    label: document.getElementById('statLabel').value.trim(),
+    order: parseInt(document.getElementById('statOrder').value) || 0,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+  if (!data.num || !data.label) return notify('Number and label required', true);
+  await db.collection('stats').add(data);
+  e.target.reset();
+  notify('Stat added'); loadStats();
+});
+
+/* ============================================================
+   COVERAGE AREAS
+   ============================================================ */
+const areasList = document.getElementById('areasList');
+
+async function loadAreas(){
+  areasList.innerHTML = '<div class="empty">Loading…</div>';
+  try {
+    const items = await fetchAll('coverage_areas');
+    if (items.length === 0){ areasList.innerHTML = '<div class="empty">No areas yet.</div>'; return; }
+    areasList.innerHTML = '';
+    items.forEach(a => {
+      const div = document.createElement('div');
+      div.className = 'item-row';
+      div.innerHTML = `
+        <div style="font-family:var(--serif);font-size:28px;color:var(--forest);min-width:70px;">${a.count || ''}</div>
+        <div class="item-body"><h4>${escapeHtml(a.name||'')}</h4><p>${escapeHtml(a.note||'')}</p></div>
+        <div class="btn-row">
+          <button class="btn btn-ghost" data-act="edit">Edit</button>
+          <button class="btn btn-danger" data-act="del">Delete</button>
+        </div>`;
+      div.querySelector('[data-act="edit"]').addEventListener('click', async () => {
+        const count = prompt('Count:', a.count ?? ''); if (count === null) return;
+        const name = prompt('Name:', a.name ?? ''); if (name === null) return;
+        const note = prompt('Note:', a.note ?? ''); if (note === null) return;
+        const order = prompt('Order:', a.order ?? ''); if (order === null) return;
+        await db.collection('coverage_areas').doc(a.id).update({ count, name, note, order: parseInt(order)||0 });
+        notify('Area updated'); loadAreas();
+      });
+      div.querySelector('[data-act="del"]').addEventListener('click', () => delDoc('coverage_areas', a.id, loadAreas, div));
+      areasList.appendChild(div);
+    });
+  } catch(e){ areasList.innerHTML = '<div class="empty">Error: ' + e.message + '</div>'; }
+}
+
+document.getElementById('areaForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const data = {
+    count: document.getElementById('areaCount').value.trim(),
+    name: document.getElementById('areaName').value.trim(),
+    note: document.getElementById('areaNote').value.trim(),
+    order: parseInt(document.getElementById('areaOrder').value) || 0
+  };
+  if (!data.name) return notify('Name required', true);
+  await db.collection('coverage_areas').add(data);
+  e.target.reset(); notify('Area added'); loadAreas();
+});
+
+/* ============================================================
+   GALLERY
+   ============================================================ */
+const galleryList = document.getElementById('galleryList');
+
+async function loadGallery(){
+  galleryList.innerHTML = '<div class="empty">Loading…</div>';
+  try {
+    const items = await fetchAll('gallery_items');
+    if (items.length === 0){ galleryList.innerHTML = '<div class="empty">No gallery images yet.</div>'; return; }
+    galleryList.innerHTML = '';
+    items.forEach(g => {
+      const div = document.createElement('div');
+      div.className = 'item-row';
+      div.innerHTML = `
+        <img class="item-preview" src="${escapeAttr(g.imageUrl||'')}" alt="" loading="lazy">
+        <div class="item-body">
+          <h4>${escapeHtml(g.caption||'(no caption)')}</h4>
+          <p>${escapeHtml(g.category||'')} · order: ${g.order ?? '—'}</p>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-ghost" data-act="edit">Edit</button>
+          <button class="btn btn-danger" data-act="del">Delete</button>
+        </div>`;
+      div.querySelector('[data-act="edit"]').addEventListener('click', async () => {
+        const caption = prompt('Caption:', g.caption ?? ''); if (caption === null) return;
+        const imageUrl = prompt('Image URL:', g.imageUrl ?? ''); if (imageUrl === null) return;
+        const category = prompt('Category (uniforms/operations/community/equipment):', g.category ?? ''); if (category === null) return;
+        const order = prompt('Order:', g.order ?? ''); if (order === null) return;
+        await db.collection('gallery_items').doc(g.id).update({ caption, imageUrl, category, order: parseInt(order)||0 });
+        notify('Image updated'); loadGallery();
+      });
+      div.querySelector('[data-act="del"]').addEventListener('click', () => delDoc('gallery_items', g.id, loadGallery, div));
+      galleryList.appendChild(div);
+    });
+  } catch(e){ galleryList.innerHTML = '<div class="empty">Error: ' + e.message + '</div>'; }
+}
+
+document.getElementById('galleryForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const url = document.getElementById('galleryUrl').value.trim();
+  const file = document.getElementById('galleryFile').files[0];
+  const caption = document.getElementById('galleryCaption').value.trim();
+  const category = document.getElementById('galleryCategory').value;
+  const order = parseInt(document.getElementById('galleryOrder').value) || 0;
+
+  if (!url && !file) return notify('Provide an image URL or upload a file', true);
+
+  const submitBtn = document.getElementById('gallerySubmitBtn');
+  const progressWrap = document.getElementById('galleryProgress');
+  const progressFill = document.getElementById('galleryProgressFill');
+  const progressText = document.getElementById('galleryProgressText');
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Uploading…';
+
+  let imageUrl = url;
+  try {
+    if (file) {
+      progressWrap.classList.add('show');
+      progressFill.style.width = '0%';
+      progressText.textContent = 'Preparing image…';
+      imageUrl = await uploadToStorage(file, 'gallery', (pct, stage) => {
+        if (stage === 'compress') {
+          progressFill.style.width = '5%';
+          progressText.textContent = 'Compressing image…';
+        } else {
+          progressFill.style.width = pct + '%';
+          progressText.textContent = 'Uploading — ' + pct + '%';
+        }
+      });
+    }
+    progressText.textContent = 'Saving to database…';
+    progressFill.style.width = '100%';
+    await db.collection('gallery_items').add({
+      imageUrl, caption, category, order,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    e.target.reset();
+    notify('Image added'); loadGallery();
+  } catch(err){
+    notify('Upload failed: ' + err.message, true);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Add image';
+    setTimeout(() => { progressWrap.classList.remove('show'); progressFill.style.width = '0%'; }, 800);
+  }
+});
+
+/* ============================================================
+   ARTICLES
+   ============================================================ */
+const articlesList = document.getElementById('articlesList');
+
+async function loadArticles(){
+  articlesList.innerHTML = '<div class="empty">Loading…</div>';
+  try {
+    const items = await fetchAll('articles');
+    if (items.length === 0){ articlesList.innerHTML = '<div class="empty">No articles yet.</div>'; return; }
+    articlesList.innerHTML = '';
+    items.forEach(a => {
+      const div = document.createElement('div');
+      div.className = 'item-row';
+      div.innerHTML = `
+        <img class="item-preview" src="${escapeAttr(a.thumbnail||'')}" alt="" loading="lazy">
+        <div class="item-body">
+          <h4>${escapeHtml(a.title||'(untitled)')}</h4>
+          <p>${escapeHtml(a.date||'')} · ${escapeHtml(a.tag||'')} · order: ${a.order ?? '—'}</p>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-ghost" data-act="edit">Edit</button>
+          <button class="btn btn-danger" data-act="del">Delete</button>
+        </div>`;
+      div.querySelector('[data-act="edit"]').addEventListener('click', async () => {
+        const date = prompt('Date:', a.date ?? ''); if (date === null) return;
+        const tag = prompt('Tag:', a.tag ?? ''); if (tag === null) return;
+        const title = prompt('Title:', a.title ?? ''); if (title === null) return;
+        const summary = prompt('Summary:', a.summary ?? ''); if (summary === null) return;
+        const body = prompt('Full body:', a.body ?? ''); if (body === null) return;
+        const thumbnail = prompt('Thumbnail URL:', a.thumbnail ?? ''); if (thumbnail === null) return;
+        const order = prompt('Order:', a.order ?? ''); if (order === null) return;
+        await db.collection('articles').doc(a.id).update({ date, tag, title, summary, body, thumbnail, order: parseInt(order)||0 });
+        notify('Article updated'); loadArticles();
+      });
+      div.querySelector('[data-act="del"]').addEventListener('click', () => delDoc('articles', a.id, loadArticles, div));
+      articlesList.appendChild(div);
+    });
+  } catch(e){ articlesList.innerHTML = '<div class="empty">Error: ' + e.message + '</div>'; }
+}
+
+document.getElementById('articleForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const thumbUrl = document.getElementById('articleThumb').value.trim();
+  const thumbFile = document.getElementById('articleThumbFile').files[0];
+
+  const submitBtn = document.getElementById('articleSubmitBtn');
+  const progressWrap = document.getElementById('articleProgress');
+  const progressFill = document.getElementById('articleProgressFill');
+  const progressText = document.getElementById('articleProgressText');
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Publishing…';
+
+  let thumbnail = thumbUrl;
+  try {
+    if (thumbFile) {
+      progressWrap.classList.add('show');
+      progressFill.style.width = '0%';
+      progressText.textContent = 'Preparing thumbnail…';
+      thumbnail = await uploadToStorage(thumbFile, 'articles', (pct, stage) => {
+        if (stage === 'compress') {
+          progressFill.style.width = '5%';
+          progressText.textContent = 'Compressing image…';
+        } else {
+          progressFill.style.width = pct + '%';
+          progressText.textContent = 'Uploading — ' + pct + '%';
+        }
+      });
+    }
+    progressText.textContent = 'Saving article…';
+    progressFill.style.width = '100%';
+    const data = {
+      date: document.getElementById('articleDate').value.trim(),
+      tag: document.getElementById('articleTag').value.trim(),
+      title: document.getElementById('articleTitle').value.trim(),
+      summary: document.getElementById('articleSummary').value.trim(),
+      body: document.getElementById('articleBody').value.trim(),
+      thumbnail,
+      order: parseInt(document.getElementById('articleOrder').value) || 0,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    if (!data.title || !data.summary) throw new Error('Title and summary required');
+    await db.collection('articles').add(data);
+    e.target.reset();
+    notify('Article published'); loadArticles();
+  } catch(err){
+    notify('Publish failed: ' + err.message, true);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Publish article';
+    setTimeout(() => { progressWrap.classList.remove('show'); progressFill.style.width = '0%'; }, 800);
+  }
+});
+
+/* ============================================================
+   MESSAGES
+   ============================================================ */
+const msgList = document.getElementById('msgList');
+const msgBadge = document.getElementById('msgBadge');
+let allMessages = [];
+let msgFilter = 'all';
+
+function withTimeout(promise, ms, label){
+  return Promise.race([
+    promise,
+    new Promise((_, rej) => setTimeout(() => rej(new Error(label + ' timed out after ' + (ms/1000) + 's. Check your internet or Firestore rules.')), ms))
+  ]);
+}
+
+async function loadMessages(){
+  console.log('[admin] loadMessages: fetching contact_messages…');
+  msgList.innerHTML = '<div class="empty">Loading messages…</div>';
+  try {
+    const snap = await withTimeout(db.collection('contact_messages').get(), 15000, 'Loading messages');
+    console.log('[admin] loadMessages: got ' + snap.size + ' documents');
+    allMessages = [];
+    snap.forEach(d => allMessages.push(Object.assign({ id: d.id }, d.data())));
+    allMessages.sort((a, b) => {
+      const at = a.createdAt && a.createdAt.toMillis ? a.createdAt.toMillis() : 0;
+      const bt = b.createdAt && b.createdAt.toMillis ? b.createdAt.toMillis() : 0;
+      return bt - at;
+    });
+    updateMsgBadge();
+    renderMessages();
+  } catch(e){
+    console.error('[admin] loadMessages failed:', e);
+    let hint = e.message || 'Unknown error';
+    if (/permission|insufficient/i.test(hint)) {
+      hint = 'Permission denied. Your Firestore rules may not include contact_messages. Open Firebase Console → Firestore → Rules and republish.';
+    } else if (/timed out/i.test(hint)) {
+      hint = 'Timed out. Check your internet connection, then click Refresh messages.';
+    }
+    msgList.innerHTML = '<div class="empty" style="color:var(--maroon);font-style:normal;">' + escapeHtml(hint) + '</div>';
+  }
+}
+
+function updateMsgBadge(){
+  const unread = allMessages.filter(m => !m.read).length;
+  msgBadge.textContent = unread;
+  msgBadge.classList.toggle('show', unread > 0);
+}
+
+function renderMessages(){
+  const filtered = allMessages.filter(m => {
+    if (msgFilter === 'unread') return !m.read;
+    if (msgFilter === 'read')   return !!m.read;
+    return true;
+  });
+
+  if (filtered.length === 0){
+    msgList.innerHTML = '<div class="empty">' +
+      (allMessages.length === 0 ? 'No messages yet.' :
+       msgFilter === 'unread' ? 'No unread messages.' :
+       msgFilter === 'read' ? 'No read messages.' : 'No messages.') +
+      '</div>';
+    return;
+  }
+
+  msgList.innerHTML = '';
+  filtered.forEach(m => {
+    const row = document.createElement('div');
+    row.className = 'msg-row' + (m.read ? '' : ' unread');
+
+    const dateStr = m.createdAt && m.createdAt.toDate
+      ? formatDate(m.createdAt.toDate())
+      : '';
+
+    const subject = m.subject || '(no subject)';
+    const message = m.message || '';
+    const name = m.name || '(no name)';
+    const email = m.email || '';
+    const phone = m.phone || '';
+
+    row.innerHTML = `
+      <div class="msg-head">
+        <div>
+          ${dateStr ? `<div class="msg-meta">${escapeHtml(dateStr)}${m.read ? '' : ' · Unread'}</div>` : ''}
+          <div class="msg-name">${escapeHtml(name)}</div>
+          ${email ? `<div class="msg-email">${escapeHtml(email)}${phone ? ' · ' + escapeHtml(phone) : ''}</div>` : (phone ? `<div class="msg-email">${escapeHtml(phone)}</div>` : '')}
+          <div class="msg-subject">${escapeHtml(subject)}</div>
+          <div class="msg-preview">${escapeHtml(message)}</div>
+        </div>
+        <div class="msg-actions">
+          <button class="btn btn-ghost" data-act="toggleRead" type="button">${m.read ? 'Mark unread' : 'Mark read'}</button>
+          <button class="btn btn-danger" data-act="del" type="button">Delete</button>
+        </div>
+      </div>
+      <div class="msg-full">
+        <div class="msg-full-inner">
+          <div class="msg-label">From</div>
+          <div class="msg-value">${escapeHtml(name)}${email ? ' &lt;<a href="mailto:' + escapeAttr(email) + '">' + escapeHtml(email) + '</a>&gt;' : ''}</div>
+          ${phone ? `<div class="msg-label">Phone</div><div class="msg-value"><a href="tel:${escapeAttr(phone)}">${escapeHtml(phone)}</a></div>` : ''}
+          <div class="msg-label">Subject</div>
+          <div class="msg-value">${escapeHtml(subject)}</div>
+          <div class="msg-label">Message</div>
+          <div class="msg-value">${escapeHtml(message)}</div>
+          <div class="btn-row" style="margin-top:18px;">
+            <a class="btn btn-primary" href="mailto:${escapeAttr(email)}?subject=${encodeURIComponent('Re: ' + subject)}">Reply by email</a>
+            <button class="btn btn-ghost" data-act="toggleRead2" type="button">${m.read ? 'Mark unread' : 'Mark read'}</button>
+          </div>
+        </div>
+      </div>`;
+
+    const head = row.querySelector('.msg-head');
+    head.addEventListener('click', (e) => {
+      if (e.target.closest('button') || e.target.closest('a')) return;
+      row.classList.toggle('open');
+    });
+
+    row.querySelector('[data-act="toggleRead"]').addEventListener('click', (e) => { e.stopPropagation(); toggleRead(m, row); });
+    row.querySelector('[data-act="toggleRead2"]').addEventListener('click', (e) => { e.stopPropagation(); toggleRead(m, row); });
+    row.querySelector('[data-act="del"]').addEventListener('click', (e) => { e.stopPropagation(); delMessage(m, row); });
+
+    msgList.appendChild(row);
+  });
+}
+
+async function toggleRead(m, row){
+  const newVal = !m.read;
+  try {
+    await db.collection('contact_messages').doc(m.id).update({ read: newVal });
+    m.read = newVal;
+    row.classList.toggle('unread', !newVal);
+    updateMsgBadge();
+    row.querySelectorAll('[data-act="toggleRead"], [data-act="toggleRead2"]').forEach(b => {
+      b.textContent = newVal ? 'Mark unread' : 'Mark read';
+    });
+    const meta = row.querySelector('.msg-meta');
+    if (meta){
+      const base = meta.textContent.replace(/\s*·\s*Unread$/, '');
+      meta.textContent = base + (newVal ? '' : ' · Unread');
+    }
+    if (msgFilter !== 'all') renderMessages();
+  } catch(e){
+    notify('Update failed: ' + e.message, true);
+  }
+}
+
+async function delMessage(m, row){
+  if (!confirm('Delete this message?')) return;
+  try {
+    await db.collection('contact_messages').doc(m.id).delete();
+    allMessages = allMessages.filter(x => x.id !== m.id);
+    row.style.opacity = '0.3';
+    updateMsgBadge();
+    setTimeout(() => renderMessages(), 300);
+  } catch(e){
+    notify('Delete failed: ' + e.message, true);
+  }
+}
+
+document.querySelectorAll('.msg-filter button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.msg-filter button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    msgFilter = btn.dataset.filter;
+    renderMessages();
+  });
+});
+
+const msgRefreshBtn = document.getElementById('msgRefreshBtn');
+if (msgRefreshBtn) msgRefreshBtn.addEventListener('click', loadMessages);
+
+function formatDate(d){
+  if (!d || isNaN(d.getTime())) return '';
+  const now = new Date();
+  const diffMs = now - d;
+  const diffMin = Math.floor(diffMs / 60000);
+  if (diffMin < 1) return 'Just now';
+  if (diffMin < 60) return diffMin + ' min ago';
+  const diffHr = Math.floor(diffMin / 60);
+  if (diffHr < 24) return diffHr + ' hr ago';
+  const diffDay = Math.floor(diffHr / 24);
+  if (diffDay < 7) return diffDay + ' day' + (diffDay === 1 ? '' : 's') + ' ago';
+  return d.toLocaleDateString('en-GB', {day:'numeric', month:'short', year:'numeric'}) +
+         ' · ' + d.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'});
+}
+
+/* ============================================================
+   IMAGE COMPRESSION + UPLOAD
+   ============================================================ */
+async function compressImage(file, maxDim, quality){
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+      let { width, height } = img;
+      if (width > maxDim || height > maxDim){
+        if (width >= height){
+          height = Math.round(height * maxDim / width);
+          width = maxDim;
+        } else {
+          width = Math.round(width * maxDim / height);
+          height = maxDim;
+        }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      canvas.toBlob(blob => {
+        if (!blob) return reject(new Error('Compression failed'));
+        const newName = file.name.replace(/\.[^.]+$/, '') + '.jpg';
+        resolve(new File([blob], newName, { type: 'image/jpeg' }));
+      }, 'image/jpeg', quality);
+    };
+    img.onerror = () => { URL.revokeObjectURL(objectUrl); reject(new Error('Could not read image')); };
+    img.src = objectUrl;
+  });
+}
+
+async function uploadToStorage(file, folder, onProgress){
+  if (file.size > MAX_UPLOAD_BYTES){
+    throw new Error('File too large — max 5 MB');
+  }
+  let compressed = file;
+  if (file.type.startsWith('image/') && file.size > 200 * 1024){
+    if (onProgress) onProgress(0, 'compress');
+    try {
+      compressed = await compressImage(file, IMAGE_MAX_DIM, IMAGE_QUALITY);
+      console.log('Compressed', (file.size/1024).toFixed(0)+'KB', '→', (compressed.size/1024).toFixed(0)+'KB');
+    } catch(e){
+      console.warn('Compression skipped:', e.message);
+      compressed = file;
+    }
+  }
+  const safeName = compressed.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+  const path = folder + '/' + Date.now() + '_' + safeName;
+  const ref = storage.ref().child(path);
+  const task = ref.put(compressed);
+  return new Promise((resolve, reject) => {
+    task.on('state_changed',
+      (snap) => {
+        if (onProgress && snap.totalBytes > 0){
+          const pct = Math.round(snap.bytesTransferred / snap.totalBytes * 100);
+          onProgress(pct, 'upload');
+        }
+      },
+      (err) => reject(err),
+      async () => {
+        try { resolve(await task.snapshot.ref.getDownloadURL()); }
+        catch(e){ reject(e); }
+      }
+    );
+  });
+}
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+async function delDoc(coll, id, reload, rowEl){
+  if (!confirm('Delete this item?')) return;
+  try {
+    await db.collection(coll).doc(id).delete();
+    rowEl.style.opacity = '0.4';
+    notify('Deleted');
+    reload();
+  } catch(e){ notify('Delete failed: ' + e.message, true); }
+}
+
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function escapeAttr(s){ return String(s).replace(/"/g, '&quot;'); }
+</script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Firestore Cleanup</title>
+<style>
+  body{font-family:system-ui,sans-serif;background:#14110D;color:#F3EEE2;padding:30px;line-height:1.6;max-width:720px;margin:0 auto;}
+  h1{font-size:22px;margin-bottom:8px;color:#FDFBF6;}
+  p{color:#B8B0A2;font-size:14px;margin-bottom:24px;}
+  .warn{color:#E08080;font-size:13px;margin-bottom:24px;}
+  .coll{border:1px solid #2A241C;background:#1C1815;padding:18px 20px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  .coll .name{font-family:monospace;font-size:15px;color:#D4A245;}
+  .coll .count{font-size:13px;color:#B8B0A2;margin-top:2px;}
+  .coll .actions{display:flex;gap:8px;}
+  button{font-family:inherit;font-size:13px;padding:8px 14px;cursor:pointer;border:1px solid #3A3A3A;background:transparent;color:#E8E1D2;transition:all .15s;}
+  button:hover{border-color:#D4A245;color:#D4A245;}
+  button.danger{border-color:#7A2222;color:#E08080;}
+  button.danger:hover{background:#7A2222;color:#fff;}
+  button:disabled{opacity:0.5;cursor:wait;}
+  .status{font-size:12px;color:#9BC4A8;margin-top:8px;font-family:monospace;}
+  .status.error{color:#E08080;}
+</style>
+</head>
+<body>
+<h1>Firestore cleanup</h1>
+<p>Shows document counts for every collection. Use the buttons to delete everything in a collection, so you can start fresh with compressed uploads.</p>
+<p class="warn">⚠️ Deletion is permanent — there's no undo. Only delete the collections you actually want cleared.</p>
+
+<div id="root" style="color:#888;font-style:italic;">Loading…</div>
+
+<script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCxsU8TQ0xI67ZZOYDqf9_H8UyoBvgJ7pQ",
+  authDomain: "security-f325d.firebaseapp.com",
+  projectId: "security-f325d",
+  storageBucket: "security-f325d.firebasestorage.app",
+  messagingSenderId: "421538949121",
+  appId: "1:421538949121:web:eb9aa79d286b2d6d2f7800"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+const COLLECTIONS = ['stats','coverage_areas','coverage_assets','gallery_items','articles'];
+const root = document.getElementById('root');
+
+COLLECTIONS.forEach(name => {
+  const box = document.createElement('div');
+  box.className = 'coll';
+  box.innerHTML = `
+    <div>
+      <div class="name">${name}</div>
+      <div class="count" id="c-${name}">Checking…</div>
+      <div class="status" id="s-${name}"></div>
+    </div>
+    <div class="actions">
+      <button data-act="deleteAll" data-coll="${name}" class="danger">Delete all</button>
+    </div>
+  `;
+  root.appendChild(box);
+});
+
+root.classList.remove('placeholder');
+
+// Count documents per collection (only fetches IDs via a limiting query on the count).
+COLLECTIONS.forEach(name => {
+  const countEl = document.getElementById('c-' + name);
+  // NOTE: get() loads full docs (including any large base64 fields).
+  // For counting purposes we still have to fetch. It's a one-time hit for cleanup.
+  db.collection(name).get()
+    .then(snap => {
+      countEl.textContent = snap.size + ' document' + (snap.size === 1 ? '' : 's');
+    })
+    .catch(err => {
+      countEl.textContent = 'Error: ' + err.message;
+      countEl.style.color = '#E08080';
+    });
+});
+
+// Delete-all handler
+document.body.addEventListener('click', async (e) => {
+  const btn = e.target.closest('button[data-act="deleteAll"]');
+  if (!btn) return;
+
+  const name = btn.dataset.coll;
+  const statusEl = document.getElementById('s-' + name);
+  const countEl  = document.getElementById('c-' + name);
+
+  if (!confirm(`Delete ALL documents in "${name}"? This cannot be undone.`)) return;
+
+  btn.disabled = true;
+  btn.textContent = 'Deleting…';
+  statusEl.textContent = 'Fetching documents…';
+  statusEl.classList.remove('error');
+
+  try {
+    const snap = await db.collection(name).get();
+    if (snap.empty){
+      statusEl.textContent = 'Collection already empty.';
+      btn.textContent = 'Delete all';
+      btn.disabled = false;
+      return;
+    }
+
+    const total = snap.size;
+    let done = 0;
+
+    // Delete one by one so we can report progress
+    for (const doc of snap.docs){
+      await doc.ref.delete();
+      done++;
+      statusEl.textContent = `Deleted ${done} / ${total}…`;
+    }
+
+    statusEl.textContent = `Deleted ${total} document${total === 1 ? '' : 's'}.`;
+    countEl.textContent = '0 documents';
+    btn.textContent = 'Deleted';
+    btn.disabled = true;
+  } catch(err){
+    statusEl.textContent = 'Error: ' + err.message;
+    statusEl.classList.add('error');
+    btn.disabled = false;
+    btn.textContent = 'Delete all';
+  }
+});
+</script>
+</body>
+</html>

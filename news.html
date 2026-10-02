@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>News — Igodomigodo Security Network</title>
+<meta name="description" content="Updates, articles and press statements from Igodomigodo Security Network.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  try { if (localStorage.getItem('isn-theme') === 'light') document.documentElement.classList.add('light-mode'); } catch(e){}
+</script>
+<style>
+  :root{
+    --ink:#14110D; --ink-soft:#2A241C; --parchment:#F3EEE2; --parchment-dim:#E8E1D2;
+    --white:#FDFBF6; --forest:#1B5E44; --gold:#B8862E; --gold-bright:#D4A245;
+    --maroon:#7A2222; --line:rgba(20,17,13,0.14); --line-dark:rgba(243,238,226,0.16);
+    --serif:'Fraunces', serif; --sans:'Work Sans', sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:var(--sans);background:var(--parchment);color:var(--ink);line-height:1.6;overflow-x:hidden;}
+  a{color:inherit;text-decoration:none;} ul{list-style:none;}
+  .wrap{width:100%;max-width:1180px;margin:0 auto;padding:0 24px;}
+  h1,h2,h3{font-family:var(--serif);font-weight:500;letter-spacing:-0.01em;line-height:1.08;}
+  p{max-width:38em;}
+  .section-tag{font-size:13px;font-weight:600;color:var(--gold-bright);margin-bottom:16px;}
+
+  .site-nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:20px 24px;background:rgba(20,17,13,0.92);backdrop-filter:blur(8px);box-shadow:0 1px 0 var(--line-dark);}
+  .brand{display:flex;align-items:center;gap:12px;color:var(--parchment);}
+  .brand-logo{height:50px;width:auto;object-fit:contain;flex-shrink:0;}
+  .brand-name{font-family:var(--serif);font-size:20px;letter-spacing:0.02em;line-height:1.15;}
+  .brand-name span{display:block;font-family:var(--sans);font-size:10px;letter-spacing:0.12em;color:var(--gold-bright);margin-top:2px;}
+  .nav-links{display:flex;align-items:center;gap:34px;}
+  .nav-links a{color:var(--parchment);font-size:14px;font-weight:500;position:relative;padding:4px 0;}
+  .nav-links a.active{color:var(--gold-bright);}
+  .nav-links a::after{content:'';position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--gold-bright);transition:width .3s ease;}
+  .nav-links a:hover::after{width:100%;}
+  .nav-cta{border:1px solid var(--gold);padding:9px 18px !important;font-size:13px !important;}
+  .nav-cta::after{display:none;} .nav-cta:hover{background:var(--gold);color:var(--ink);}
+  .nav-toggle{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;z-index:110;}
+  .nav-toggle span{width:24px;height:2px;background:var(--parchment);}
+
+  .theme-toggle{background:transparent;border:1px solid var(--line-dark);color:var(--parchment);width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .25s ease, color .25s ease;flex-shrink:0;padding:0;}
+  .theme-toggle:hover{border-color:var(--gold-bright);color:var(--gold-bright);}
+  .theme-toggle svg{width:18px;height:18px;display:block;}
+  .theme-toggle .icon-sun{display:none;}
+
+  .page-hero{background:linear-gradient(180deg, rgba(20,17,13,0.72) 0%, rgba(20,17,13,0.92) 100%), url('hero.png') center/cover no-repeat, var(--ink);color:var(--white);padding:170px 0 70px;}
+  .page-hero h1{font-size:clamp(2.2rem,5vw,3.6rem);color:var(--white);max-width:18em;}
+  .page-hero p{color:var(--parchment-dim);font-size:clamp(1rem,1.4vw,1.15rem);margin-top:22px;max-width:36em;}
+
+  .articles{background:var(--parchment);padding:80px 0 100px;}
+  .article-list{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);}
+  .article-row{background:var(--white);padding:0;overflow:hidden;}
+  .article-head{display:grid;grid-template-columns:120px 1fr auto auto;gap:24px;align-items:center;padding:24px 28px;cursor:pointer;transition:background .25s ease;}
+  .article-head:hover{background:var(--parchment-dim);}
+  .article-thumb{width:120px;height:90px;object-fit:cover;border:1px solid var(--line);}
+  .article-thumb.placeholder{background:linear-gradient(135deg,var(--ink),var(--forest));display:flex;align-items:center;justify-content:center;color:var(--gold-bright);font-family:var(--serif);font-size:22px;}
+  .article-info h3{font-size:19px;font-family:var(--sans);font-weight:600;margin-bottom:6px;}
+  .article-meta{font-size:12.5px;color:var(--forest);font-weight:600;margin-bottom:8px;}
+  .article-info p{font-size:14px;color:var(--ink-soft);}
+  .article-tag{font-size:12px;border:1px solid var(--line);padding:6px 12px;color:var(--ink-soft);white-space:nowrap;align-self:start;}
+  .article-toggle-icon{width:26px;height:26px;border:1px solid var(--line);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--forest);transition:transform .3s ease, background .3s ease;}
+  .article-full{max-height:0;overflow:hidden;transition:max-height .45s ease;background:var(--parchment-dim);}
+  .article-full-inner{padding:28px 32px 34px;border-top:1px solid var(--line);}
+  .article-full-inner p{font-size:15px;color:var(--ink);margin-bottom:14px;max-width:70em;}
+  .article-row.open .article-full{max-height:5000px;}
+  .article-row.open .article-toggle-icon{transform:rotate(45deg);background:var(--forest);color:var(--white);border-color:var(--forest);}
+  .articles-empty{grid-column:1/-1;padding:60px 20px;text-align:center;color:var(--ink-soft);font-size:14px;font-style:italic;}
+
+  @media (max-width: 720px){
+    .nav-links{position:fixed;top:0;right:0;height:100vh;width:78%;max-width:320px;background:var(--ink);flex-direction:column;justify-content:center;align-items:flex-start;padding:40px;gap:26px;transform:translateX(100%);transition:transform .4s ease;}
+    .nav-links.open{transform:translateX(0);} .nav-toggle{display:flex;} .nav-links a{font-size:17px;}
+    .page-hero{padding:130px 0 50px;}
+    .article-head{grid-template-columns:80px 1fr;padding:20px;}
+    .article-thumb{width:80px;height:60px;}
+    .article-tag{grid-column:1/-1;justify-self:start;}
+    .article-info h3{font-size:17px;}
+    .article-full-inner{padding:22px;}
+  }
+
+  html.light-mode{
+    --ink:#0F1A2E; --ink-soft:#3A4A6B; --parchment:#F8FAFC; --parchment-dim:#E8ECF3;
+    --white:#FFFFFF; --forest:#C8102E; --gold:#B8862E; --gold-bright:#D4A245;
+    --maroon:#1E3A8A; --line:rgba(15,26,46,0.12); --line-dark:rgba(255,255,255,0.18);
+  }
+  html.light-mode .site-nav{background:rgba(255,255,255,0.95);backdrop-filter:blur(8px);box-shadow:0 1px 0 rgba(15,26,46,0.08);}
+  html.light-mode .nav-links a{color:#0F1A2E;}
+  html.light-mode .nav-links a.active{color:#C8102E;}
+  html.light-mode .nav-links a::after{background:#C8102E;}
+  html.light-mode .nav-cta{border-color:#C8102E;color:#0F1A2E;}
+  html.light-mode .nav-cta:hover{background:#C8102E;color:#FFFFFF;}
+  html.light-mode .brand,
+  html.light-mode .brand-name{color:#0F1A2E;}
+  html.light-mode .brand-name span{color:#C8102E;}
+  html.light-mode .nav-toggle span{background:#0F1A2E;}
+  html.light-mode .theme-toggle{border-color:rgba(15,26,46,0.2);color:#0F1A2E;}
+  html.light-mode .theme-toggle:hover{border-color:#C8102E;color:#C8102E;}
+  html.light-mode .theme-toggle .icon-sun{display:block;}
+  html.light-mode .theme-toggle .icon-moon{display:none;}
+  @media (max-width: 720px){
+    html.light-mode .nav-links{background:#FFFFFF;box-shadow:-10px 0 30px rgba(15,26,46,0.15);}
+    html.light-mode .nav-links a{color:#0F1A2E;}
+    html.light-mode .nav-links a.active{color:#C8102E;}
+  }
+
+  .brand-name{font-family:var(--serif);font-size:17px;font-weight:600;letter-spacing:0.06em;line-height:1.1;text-transform:uppercase;color:var(--parchment);}
+  .brand-name span{display:block;font-family:var(--sans);font-size:10.5px;font-weight:600;letter-spacing:0.18em;color:var(--parchment);margin-top:3px;}
+  .brand-name em{display:block;font-family:var(--sans);font-style:normal;font-size:10px;font-weight:500;letter-spacing:0.12em;color:var(--gold-bright);margin-top:4px;}
+  html.light-mode .brand-name{color:#0F1A2E;}
+  html.light-mode .brand-name span{color:#0F1A2E;}
+  html.light-mode .brand-name em{color:#C8102E;}
+
+  footer{background:var(--ink);color:var(--parchment-dim);padding:80px 0 30px;}
+  .footer-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:50px;padding-bottom:50px;border-bottom:1px solid var(--line-dark);}
+  .footer-brand .brand{display:inline-flex;align-items:center;gap:14px;color:var(--parchment);}
+  .footer-brand .brand-logo{height:56px;}
+  .footer-brand .brand-name{color:var(--parchment);}
+  .footer-brand .brand-name span{color:var(--parchment);}
+  .footer-brand .brand-name em{color:var(--gold-bright);}
+  .footer-brand p.footer-address{font-size:14px;margin-top:20px;color:var(--parchment-dim);max-width:22em;line-height:1.7;}
+  .footer-commitment{margin-top:24px;padding-top:20px;border-top:1px solid var(--line-dark);max-width:22em;}
+  .footer-commitment h6{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold-bright);margin-bottom:12px;}
+  .footer-commitment ul{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:13.5px;color:var(--parchment-dim);font-weight:500;letter-spacing:0.02em;}
+  .footer-commitment li{position:relative;padding-left:14px;}
+  .footer-commitment li::before{content:'';position:absolute;left:0;top:9px;width:5px;height:5px;background:var(--gold-bright);border-radius:50%;}
+  .footer-col h5{font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold-bright);margin-bottom:18px;}
+  .footer-col ul{display:grid;gap:10px;}
+  .footer-col a{font-size:14px;color:var(--parchment-dim);display:inline-block;transition:color .2s ease, transform .2s ease;}
+  .footer-col a:hover{color:var(--gold-bright);transform:translateX(2px);}
+  .footer-col a[href^="tel"], .footer-col a[href^="mailto"]{color:var(--parchment);font-weight:500;}
+  .footer-col a[href^="tel"]:hover, .footer-col a[href^="mailto"]:hover{color:var(--gold-bright);}
+  .social-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;}
+  .social-links a{display:flex;align-items:center;justify-content:center;width:42px;height:42px;border:1px solid var(--line-dark);border-radius:50%;color:var(--parchment-dim);transition:all .25s ease;background:rgba(253,251,246,0.04);}
+  .social-links a:hover{border-color:var(--gold-bright);color:var(--ink);background:var(--gold-bright);transform:translateY(-3px);}
+  .social-links svg{width:17px;height:17px;display:block;fill:currentColor;}
+  .footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:26px;font-size:12.5px;color:rgba(243,238,226,0.5);flex-wrap:wrap;gap:10px;}
+  @media (max-width: 900px){ .footer-grid{grid-template-columns:1fr 1fr;gap:40px;} }
+  @media (max-width: 720px){
+    .footer-grid{grid-template-columns:1fr;gap:34px;}
+    .footer-bottom{flex-direction:column;align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav" id="siteNav">
+  <a href="index.html" class="brand">
+    <img src="logo.png" alt="Igodomigodo Security Network logo" class="brand-logo">
+    <div class="brand-name">IGODOMIGODO<span>SECURITY NETWORK</span><em>(OBA GHATO KPERE)</em></div>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="coverage.html">Coverage</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="news.html" class="active">News</a></li>
+    <li><a href="contact.html" class="btn nav-cta">Contact</a></li>
+    <li>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light and dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+    </li>
+  </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+</nav>
+
+<section class="page-hero">
+  <div class="wrap">
+    <div class="section-tag">News</div>
+    <h1>Updates from the network.</h1>
+    <p>Announcements, programme milestones and articles. Click any article to read the full story.</p>
+  </div>
+</section>
+
+<section class="articles">
+  <div class="wrap">
+    <div class="article-list" id="articleList">
+      <div class="articles-empty">Loading articles…</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="brand">
+          <img src="logo.png" alt="Igodomigodo Security Network logo" class="brand-logo">
+          <div class="brand-name">IGODOMIGODO<span>SECURITY NETWORK</span><em>(OBA GHATO KPERE)</em></div>
+        </a>
+        <p class="footer-address">169 Upper Ekewan Road, Benin City, Edo State, Nigeria</p>
+        <div class="footer-commitment">
+          <h6>Our commitment</h6>
+          <ul><li>Transparency</li><li>Accountability</li><li>Welfare</li></ul>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Navigate</h5>
+        <ul><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="services.html">Services</a></li><li><a href="coverage.html">Coverage</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="news.html">News</a></li><li><a href="contact.html">Contact</a></li></ul>
+      </div>
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <ul><li><a href="tel:08055566632">0805 556 6632</a></li><li><a href="mailto:info@igodomigodosecurity.com">info@igodomigodosecurity.com</a></li><li><a href="#">169 Upper Ekewan Road, Benin City, Edo State</a></li></ul>
+      </div>
+      <div class="footer-col">
+        <h5>Follow us</h5>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+          <a href="#" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+          <a href="#" aria-label="X (Twitter)"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Igodomigodo Security Network Limited. RC 9758429.</span>
+      <span>Benin City, Edo State · Nigeria</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+  const themeToggle = document.getElementById('themeToggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      const isLight = document.documentElement.classList.toggle('light-mode');
+      try { localStorage.setItem('isn-theme', isLight ? 'light' : 'dark'); } catch(e){}
+    });
+  }
+  function escapeHtml(s){
+    return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+</script>
+
+<script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCxsU8TQ0xI67ZZOYDqf9_H8UyoBvgJ7pQ",
+    authDomain: "security-f325d.firebaseapp.com",
+    projectId: "security-f325d",
+    storageBucket: "security-f325d.firebasestorage.app",
+    messagingSenderId: "421538949121",
+    appId: "1:421538949121:web:eb9aa79d286b2d6d2f7800"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  const list = document.getElementById('articleList');
+  db.collection('articles').get()
+    .then(snap => {
+      if (snap.empty){ list.innerHTML = '<div class="articles-empty">No articles published yet.</div>'; return; }
+      const items = [];
+      snap.forEach(d => items.push(d.data()));
+      items.sort((a, b) => {
+        const ao = (typeof a.order === 'number') ? a.order : 9999;
+        const bo = (typeof b.order === 'number') ? b.order : 9999;
+        return ao - bo;
+      });
+      list.innerHTML = '';
+      items.forEach(a => {
+        const row = document.createElement('div');
+        row.className = 'article-row';
+        const thumbHtml = a.thumbnail
+          ? `<img class="article-thumb" src="${escapeHtml(a.thumbnail)}" alt="" loading="lazy">`
+          : `<div class="article-thumb placeholder">ISN</div>`;
+        const summary = a.summary || '';
+        const date = a.date || '';
+        const tag = a.tag || '';
+        const title = a.title || '';
+        const body = a.body || '';
+        row.innerHTML = `
+          <div class="article-head">
+            ${thumbHtml}
+            <div class="article-info">
+              ${date ? `<div class="article-meta">${escapeHtml(date)}${tag ? ' · ' + escapeHtml(tag) : ''}</div>` : (tag ? `<div class="article-meta">${escapeHtml(tag)}</div>` : '')}
+              <h3>${escapeHtml(title)}</h3>
+              <p>${escapeHtml(summary)}</p>
+            </div>
+            <div class="article-tag">${escapeHtml(tag || 'Article')}</div>
+            <div class="article-toggle-icon" aria-hidden="true">+</div>
+          </div>
+          <div class="article-full">
+            <div class="article-full-inner"></div>
+          </div>`;
+        const bodyEl = row.querySelector('.article-full-inner');
+        const paragraphs = body.split(/\n\s*\n/).filter(p => p.trim());
+        if (paragraphs.length === 0) {
+          bodyEl.innerHTML = '<p style="font-style:italic;color:var(--ink-soft);">No additional details.</p>';
+        } else {
+          paragraphs.forEach(p => {
+            const el = document.createElement('p');
+            el.textContent = p.trim();
+            bodyEl.appendChild(el);
+          });
+        }
+        row.querySelector('.article-head').addEventListener('click', () => row.classList.toggle('open'));
+        list.appendChild(row);
+      });
+    })
+    .catch(err => {
+      list.innerHTML = '<div class="articles-empty">Unable to load articles. ' + err.message + '</div>';
+      console.error(err);
+    });
+</script>
+</body>
+</html>

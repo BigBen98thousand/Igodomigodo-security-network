@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Igodomigodo Security Network — Edo-Rooted Protection</title>
+<meta name="description" content="Indigenous intelligence, cultural legitimacy and technology-enabled protection for Edo State's critical assets.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  try { if (localStorage.getItem('isn-theme') === 'light') document.documentElement.classList.add('light-mode'); } catch(e){}
+</script>
+<style>
+  :root{
+    --ink:#14110D; --ink-soft:#2A241C; --parchment:#F3EEE2; --parchment-dim:#E8E1D2;
+    --white:#FDFBF6; --forest:#1B5E44; --forest-dim:#164A37; --gold:#B8862E; --gold-bright:#D4A245;
+    --maroon:#7A2222; --line:rgba(20,17,13,0.14); --line-dark:rgba(243,238,226,0.16);
+    --serif:'Fraunces', serif; --sans:'Work Sans', sans-serif; --container: 1180px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--sans);background:var(--parchment);color:var(--ink);line-height:1.6;overflow-x:hidden;}
+  img{max-width:100%;display:block;}
+  a{color:inherit;text-decoration:none;}
+  ul{list-style:none;}
+  .wrap{width:100%;max-width:var(--container);margin:0 auto;padding:0 24px;}
+  h1,h2,h3,h4{font-family:var(--serif);font-weight:500;letter-spacing:-0.01em;line-height:1.08;}
+  p{max-width:38em;}
+
+  .site-nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:20px 24px;background:transparent;transition:background .4s ease, padding .4s ease, box-shadow .4s ease;}
+  .site-nav.scrolled{background:rgba(20,17,13,0.92);backdrop-filter:blur(8px);padding:14px 24px;box-shadow:0 1px 0 var(--line-dark);}
+  .brand{display:flex;align-items:center;gap:12px;color:var(--parchment);}
+  .brand-logo{height:50px;width:auto;object-fit:contain;flex-shrink:0;}
+  .brand-name{font-family:var(--serif);font-size:20px;letter-spacing:0.02em;line-height:1.15;}
+  .brand-name span{display:block;font-family:var(--sans);font-size:10px;letter-spacing:0.12em;color:var(--gold-bright);margin-top:2px;}
+  .nav-links{display:flex;align-items:center;gap:34px;}
+  .nav-links a{color:var(--parchment);font-size:14px;font-weight:500;position:relative;padding:4px 0;}
+  .nav-links a::after{content:'';position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--gold-bright);transition:width .3s ease;}
+  .nav-links a:hover::after{width:100%;}
+  .nav-cta{border:1px solid var(--gold);padding:9px 18px !important;font-size:13px !important;}
+  .nav-cta::after{display:none;}
+  .nav-cta:hover{background:var(--gold);color:var(--ink);}
+  .nav-toggle{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;z-index:110;}
+  .nav-toggle span{width:24px;height:2px;background:var(--parchment);transition:transform .3s ease, opacity .3s ease;}
+
+  .theme-toggle{background:transparent;border:1px solid var(--line-dark);color:var(--parchment);width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .25s ease, color .25s ease;flex-shrink:0;padding:0;}
+  .theme-toggle:hover{border-color:var(--gold-bright);color:var(--gold-bright);}
+  .theme-toggle svg{width:18px;height:18px;display:block;}
+  .theme-toggle .icon-sun{display:none;}
+
+  .hero{
+    min-height:100vh;
+    background:
+      linear-gradient(180deg, rgba(20,17,13,0.55) 0%, rgba(20,17,13,0.88) 70%, var(--ink) 100%),
+      url('hero.png') center/cover no-repeat,
+      radial-gradient(ellipse at 30% 20%, rgba(184,134,46,0.16), transparent 55%),
+      var(--ink);
+    display:flex;align-items:center;position:relative;padding:140px 0 80px;
+  }
+  .hero-inner{max-width:720px;}
+  .hero-eyebrow{color:var(--gold-bright);font-size:13px;font-weight:600;letter-spacing:0.04em;margin-bottom:22px;display:flex;align-items:center;gap:10px;overflow:hidden;}
+  .hero-eyebrow-line{width:26px;height:1px;background:var(--gold-bright);}
+  .hero h1{color:var(--white);font-size:clamp(2.6rem, 6vw, 4.6rem);overflow:hidden;}
+  .hero h1 .line{display:block;transform:translateY(110%);}
+  .hero-sub{color:var(--parchment-dim);font-size:clamp(1.05rem, 1.6vw, 1.25rem);margin-top:28px;max-width:34em;opacity:0;}
+  .hero-actions{display:flex;gap:16px;margin-top:40px;flex-wrap:wrap;opacity:0;}
+  .btn{font-family:var(--sans);font-weight:600;font-size:14.5px;padding:15px 28px;border:1px solid transparent;cursor:pointer;display:inline-block;transition:transform .25s ease, background .25s ease, color .25s ease, border-color .25s ease;}
+  .btn-primary{background:var(--gold-bright);color:var(--ink);}
+  .btn-primary:hover{transform:translateY(-2px);background:var(--gold);}
+  .btn-ghost{border-color:var(--line-dark);color:var(--white);}
+  .btn-ghost:hover{border-color:var(--gold-bright);color:var(--gold-bright);}
+  .hero-scroll{position:absolute;bottom:36px;left:24px;display:flex;align-items:center;gap:10px;color:var(--parchment-dim);font-size:12px;letter-spacing:0.05em;}
+  .hero-scroll-bar{width:1px;height:36px;background:linear-gradient(to bottom, var(--gold-bright), transparent);}
+
+  .stats{background:var(--parchment);padding:90px 0;border-bottom:1px solid var(--line);}
+  .stats-intro{max-width:640px;margin-bottom:44px;}
+  .stats-intro .section-tag{font-size:13px;font-weight:600;color:var(--forest);margin-bottom:14px;}
+  .stats-intro h2{font-size:clamp(1.6rem,2.8vw,2.2rem);}
+  .stats-intro p{color:var(--ink-soft);font-size:14.5px;margin-top:12px;line-height:1.7;max-width:44em;}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;}
+  .stat-num{font-family:var(--serif);font-size:clamp(2.4rem,4.5vw,3.4rem);color:var(--forest);line-height:1;}
+  .stat-label{font-size:14px;margin-top:10px;color:var(--ink-soft);max-width:16em;}
+  .stats-empty{grid-column:1/-1;text-align:center;color:var(--ink-soft);font-size:14px;font-style:italic;padding:20px;}
+
+  .mandate{background:var(--parchment);padding:40px 0 120px;}
+  .mandate-grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:70px;align-items:start;}
+  .section-tag{font-size:13px;font-weight:600;color:var(--forest);margin-bottom:16px;}
+  .mandate h2{font-size:clamp(1.9rem,3.4vw,2.7rem);color:var(--ink);}
+  .mandate-copy p{color:var(--ink-soft);font-size:16px;}
+  .mandate-copy p + p{margin-top:16px;}
+  .mandate-list{display:grid;gap:26px;}
+  .mandate-item{border-left:2px solid var(--forest);padding-left:20px;}
+  .mandate-item h4{font-size:17px;font-weight:600;color:var(--ink);margin-bottom:6px;}
+  .mandate-item p{font-size:14.5px;color:var(--ink-soft);}
+
+  .model{background:var(--ink);color:var(--parchment);padding:100px 0;}
+  .model-head{max-width:640px;margin-bottom:70px;}
+  .model-head .section-tag{color:var(--gold-bright);}
+  .model-head h2{color:var(--white);font-size:clamp(1.9rem,3.4vw,2.7rem);}
+  .model-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;position:relative;}
+  .model-steps::before{content:'';position:absolute;top:26px;left:0;right:0;height:1px;background:var(--line-dark);}
+  .model-step{padding:0 30px 0 0;position:relative;}
+  .model-step:first-child{padding-left:0;}
+  .model-num{font-family:var(--serif);font-size:14px;color:var(--ink);background:var(--gold-bright);width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:28px;position:relative;z-index:2;}
+  .model-step h3{color:var(--white);font-size:20px;margin-bottom:12px;}
+  .model-step p{color:var(--parchment-dim);font-size:14.5px;max-width:26em;}
+
+  .services{background:var(--parchment);padding:110px 0;}
+  .services-head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;margin-bottom:56px;flex-wrap:wrap;}
+  .services-head h2{font-size:clamp(1.9rem,3.4vw,2.7rem);}
+  .services-head p{color:var(--ink-soft);font-size:15px;}
+  .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
+  .service-card{background:var(--parchment);padding:36px 30px;transition:background .3s ease, transform .3s ease;}
+  .service-card:hover{background:var(--white);transform:translateY(-3px);}
+  .service-card h3{font-size:18px;font-weight:600;font-family:var(--sans);color:var(--forest);margin-bottom:12px;}
+  .service-card p{font-size:14px;color:var(--ink-soft);}
+
+  .coverage{background:var(--forest);color:var(--white);padding:100px 0;}
+  .coverage-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
+  .coverage h2{font-size:clamp(1.9rem,3.4vw,2.6rem);color:var(--white);}
+  .coverage p.lead{color:rgba(253,251,246,0.85);margin-top:20px;font-size:15px;line-height:1.7;}
+  .coverage-areas{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:32px;}
+  .coverage-areas span{display:block;padding:12px 14px;border:1px solid rgba(253,251,246,0.25);font-size:13.5px;font-weight:500;}
+  .coverage-assets{border-top:1px solid rgba(253,251,246,0.2);padding-top:30px;}
+  .coverage-assets h4{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--gold-bright);margin-bottom:14px;letter-spacing:0.1em;text-transform:uppercase;}
+  .coverage-assets p{font-size:14.5px;color:rgba(253,251,246,0.85);line-height:1.7;}
+  .coverage-note{grid-column:1/-1;margin-top:34px;padding-top:24px;border-top:1px solid rgba(253,251,246,0.2);font-size:13.5px;color:rgba(253,251,246,0.75);line-height:1.7;max-width:60em;}
+
+  .alignment{background:var(--ink);color:var(--parchment);padding:110px 0;text-align:center;}
+  .alignment blockquote{font-family:var(--serif);font-size:clamp(1.5rem,3vw,2.2rem);font-weight:400;line-height:1.3;max-width:820px;margin:0 auto;color:var(--white);}
+  .alignment .rule{width:60px;height:2px;background:var(--gold-bright);margin:0 auto 34px;}
+  .alignment cite{display:block;margin-top:30px;font-family:var(--sans);font-style:normal;font-size:13px;color:var(--gold-bright);}
+
+  .cta{background:var(--parchment);padding:110px 0;}
+  .cta-box{background:var(--maroon);color:var(--white);padding:64px 60px;display:flex;justify-content:space-between;align-items:center;gap:40px;flex-wrap:wrap;}
+  .cta-box h2{color:var(--white);font-size:clamp(1.7rem,3vw,2.3rem);max-width:14em;}
+  .cta-box .btn-primary{flex-shrink:0;}
+
+  @media (max-width: 900px){
+    .stats-grid{grid-template-columns:repeat(2,1fr);gap:36px 24px;}
+    .mandate-grid{grid-template-columns:1fr;gap:40px;}
+    .model-steps{grid-template-columns:1fr;gap:44px;}
+    .model-steps::before{display:none;}
+    .model-step{padding:0;}
+    .services-grid{grid-template-columns:repeat(2,1fr);}
+    .coverage-grid{grid-template-columns:1fr;gap:36px;}
+  }
+  @media (max-width: 720px){
+    .nav-links{position:fixed;top:0;right:0;height:100vh;width:78%;max-width:320px;background:var(--ink);flex-direction:column;justify-content:center;align-items:flex-start;padding:40px;gap:26px;transform:translateX(100%);transition:transform .4s ease;box-shadow:-10px 0 30px rgba(0,0,0,0.3);}
+    .nav-links.open{transform:translateX(0);}
+    .nav-toggle{display:flex;}
+    .nav-links a{font-size:17px;}
+    .hero{padding:120px 0 70px;}
+    .hero-actions{flex-direction:column;align-items:flex-start;}
+    .stats-grid{grid-template-columns:1fr 1fr;}
+    .services-grid{grid-template-columns:1fr;}
+    .services-head{flex-direction:column;align-items:flex-start;}
+    .coverage-areas{grid-template-columns:1fr;}
+    .cta-box{flex-direction:column;align-items:flex-start;padding:44px 28px;}
+  }
+
+  html.light-mode{
+    --ink:#0F1A2E; --ink-soft:#3A4A6B; --parchment:#F8FAFC; --parchment-dim:#E8ECF3;
+    --white:#FFFFFF; --forest:#C8102E; --forest-dim:#A00D24; --gold:#B8862E; --gold-bright:#D4A245;
+    --maroon:#1E3A8A; --line:rgba(15,26,46,0.12); --line-dark:rgba(255,255,255,0.18);
+  }
+  html.light-mode .site-nav{background:transparent;box-shadow:none;}
+  html.light-mode .site-nav.scrolled{background:rgba(255,255,255,0.95);backdrop-filter:blur(8px);box-shadow:0 1px 0 rgba(15,26,46,0.08);}
+  html.light-mode .site-nav:not(.scrolled) .nav-links a{color:#F8FAFC;}
+  html.light-mode .site-nav:not(.scrolled) .brand,
+  html.light-mode .site-nav:not(.scrolled) .brand-name{color:#F8FAFC;}
+  html.light-mode .site-nav:not(.scrolled) .brand-name span{color:#D4A245;}
+  html.light-mode .site-nav:not(.scrolled) .nav-toggle span{background:#F8FAFC;}
+  html.light-mode .site-nav:not(.scrolled) .theme-toggle{border-color:rgba(255,255,255,0.3);color:#F8FAFC;}
+  html.light-mode .site-nav.scrolled .nav-links a{color:#0F1A2E;}
+  html.light-mode .site-nav.scrolled .brand,
+  html.light-mode .site-nav.scrolled .brand-name{color:#0F1A2E;}
+  html.light-mode .site-nav.scrolled .brand-name span{color:#C8102E;}
+  html.light-mode .site-nav.scrolled .nav-toggle span{background:#0F1A2E;}
+  html.light-mode .site-nav.scrolled .theme-toggle{border-color:rgba(15,26,46,0.2);color:#0F1A2E;}
+  html.light-mode .nav-links a.active{color:#D4A245;}
+  html.light-mode .site-nav.scrolled .nav-links a.active{color:#C8102E;}
+  html.light-mode .nav-links a::after{background:#C8102E;}
+  html.light-mode .site-nav:not(.scrolled) .nav-links a::after{background:#D4A245;}
+  html.light-mode .nav-cta{border-color:#C8102E;color:#FFFFFF;}
+  html.light-mode .site-nav.scrolled .nav-cta{color:#0F1A2E;}
+  html.light-mode .nav-cta:hover{background:#C8102E;color:#FFFFFF;}
+  html.light-mode .theme-toggle:hover{border-color:#D4A245;color:#D4A245;}
+  html.light-mode .theme-toggle .icon-sun{display:block;}
+  html.light-mode .theme-toggle .icon-moon{display:none;}
+  @media (max-width: 720px){
+    html.light-mode .nav-links{background:#FFFFFF;box-shadow:-10px 0 30px rgba(15,26,46,0.15);}
+    html.light-mode .nav-links a{color:#0F1A2E;}
+    html.light-mode .nav-links a.active{color:#C8102E;}
+  }
+
+  .brand-name{font-family:var(--serif);font-size:17px;font-weight:600;letter-spacing:0.06em;line-height:1.1;text-transform:uppercase;color:var(--parchment);}
+  .brand-name span{display:block;font-family:var(--sans);font-size:10.5px;font-weight:600;letter-spacing:0.18em;color:var(--parchment);margin-top:3px;}
+  .brand-name em{display:block;font-family:var(--sans);font-style:normal;font-size:10px;font-weight:500;letter-spacing:0.12em;color:var(--gold-bright);margin-top:4px;}
+  html.light-mode .site-nav:not(.scrolled) .brand-name,
+  html.light-mode .site-nav:not(.scrolled) .brand-name span{color:#F8FAFC;}
+  html.light-mode .site-nav:not(.scrolled) .brand-name em{color:#D4A245;}
+  html.light-mode .site-nav.scrolled .brand-name,
+  html.light-mode .site-nav.scrolled .brand-name span{color:#0F1A2E;}
+  html.light-mode .site-nav.scrolled .brand-name em{color:#C8102E;}
+
+  footer{background:var(--ink);color:var(--parchment-dim);padding:80px 0 30px;}
+  .footer-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:50px;padding-bottom:50px;border-bottom:1px solid var(--line-dark);}
+  .footer-brand .brand{display:inline-flex;align-items:center;gap:14px;color:var(--parchment);}
+  .footer-brand .brand-logo{height:56px;}
+  .footer-brand .brand-name{color:var(--parchment);}
+  .footer-brand .brand-name span{color:var(--parchment);}
+  .footer-brand .brand-name em{color:var(--gold-bright);}
+  .footer-brand p.footer-address{font-size:14px;margin-top:20px;color:var(--parchment-dim);max-width:22em;line-height:1.7;}
+  .footer-commitment{margin-top:24px;padding-top:20px;border-top:1px solid var(--line-dark);max-width:22em;}
+  .footer-commitment h6{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold-bright);margin-bottom:12px;}
+  .footer-commitment ul{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:13.5px;color:var(--parchment-dim);font-weight:500;letter-spacing:0.02em;}
+  .footer-commitment li{position:relative;padding-left:14px;}
+  .footer-commitment li::before{content:'';position:absolute;left:0;top:9px;width:5px;height:5px;background:var(--gold-bright);border-radius:50%;}
+  .footer-col h5{font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold-bright);margin-bottom:18px;}
+  .footer-col ul{display:grid;gap:10px;}
+  .footer-col a{font-size:14px;color:var(--parchment-dim);display:inline-block;transition:color .2s ease, transform .2s ease;}
+  .footer-col a:hover{color:var(--gold-bright);transform:translateX(2px);}
+  .footer-col a[href^="tel"], .footer-col a[href^="mailto"]{color:var(--parchment);font-weight:500;}
+  .footer-col a[href^="tel"]:hover, .footer-col a[href^="mailto"]:hover{color:var(--gold-bright);}
+  .social-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;}
+  .social-links a{display:flex;align-items:center;justify-content:center;width:42px;height:42px;border:1px solid var(--line-dark);border-radius:50%;color:var(--parchment-dim);transition:all .25s ease;background:rgba(253,251,246,0.04);}
+  .social-links a:hover{border-color:var(--gold-bright);color:var(--ink);background:var(--gold-bright);transform:translateY(-3px);}
+  .social-links svg{width:17px;height:17px;display:block;fill:currentColor;}
+  .footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:26px;font-size:12.5px;color:rgba(243,238,226,0.5);flex-wrap:wrap;gap:10px;}
+  @media (max-width: 900px){ .footer-grid{grid-template-columns:1fr 1fr;gap:40px;} }
+  @media (max-width: 720px){
+    .footer-grid{grid-template-columns:1fr;gap:34px;}
+    .footer-bottom{flex-direction:column;align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav" id="siteNav">
+  <a href="index.html" class="brand">
+    <img src="logo.png" alt="Igodomigodo Security Network logo" class="brand-logo">
+    <div class="brand-name">IGODOMIGODO<span>SECURITY NETWORK</span><em>(OBA GHATO KPERE)</em></div>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="coverage.html">Coverage</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="news.html">News</a></li>
+    <li><a href="contact.html" class="btn nav-cta">Contact</a></li>
+    <li>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light and dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+    </li>
+  </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+</nav>
+
+<section class="hero">
+  <div class="wrap hero-inner">
+    <div class="hero-eyebrow"><span class="hero-eyebrow-line"></span>Benin City, Edo State</div>
+    <h1>
+      <span class="line-wrap"><span class="line">Edo-rooted intelligence.</span></span>
+      <span class="line-wrap"><span class="line">Nationally aligned protection.</span></span>
+    </h1>
+    <p class="hero-sub">Indigenous intelligence, cultural legitimacy and technology-enabled protection for Edo State's critical infrastructure, communities and heritage.</p>
+    <div class="hero-actions">
+      <a href="about.html" class="btn btn-primary">Explore our mandate</a>
+      <a href="contact.html" class="btn btn-ghost">Get in touch</a>
+    </div>
+  </div>
+  <div class="hero-scroll"><div class="hero-scroll-bar"></div>Scroll</div>
+</section>
+
+<section class="stats">
+  <div class="wrap">
+    <div class="stats-intro">
+      <div class="section-tag">By the numbers</div>
+      <h2>A current snapshot — not a ceiling.</h2>
+      <p>These figures reflect our operating position as at today. As the programme expands across Edo State, both the number of profiled assets and the breadth of service coverage will continue to grow.</p>
+    </div>
+    <div class="stats-grid" id="statsGrid">
+      <div class="stats-empty">Loading stats…</div>
+    </div>
+  </div>
+</section>
+
+<section class="mandate">
+  <div class="wrap mandate-grid">
+    <div>
+      <div class="section-tag">The mandate</div>
+      <h2>People, infrastructure, territory and heritage.</h2>
+      <div class="mandate-copy">
+        <p>Igodomigodo is positioned as an Edo-first security platform, not a generic contractor. The profile combines local legitimacy, infrastructure protection, riverine reach and command-room accountability.</p>
+        <p>Communities are more likely to share intelligence with people they know, trust and can hold accountable — that legitimacy is the differentiator equipment alone can't provide.</p>
+      </div>
+    </div>
+    <div class="mandate-list">
+      <div class="mandate-item"><h4>Critical infrastructure</h4><p>Oil pipelines, gas pipelines, flow stations, gas plants, refineries and storage facilities.</p></div>
+      <div class="mandate-item"><h4>Territorial integrity</h4><p>Boundary corridors, riverine access routes and areas exposed to sabotage risk.</p></div>
+      <div class="mandate-item"><h4>Cultural heritage</h4><p>Respect for Edo cultural institutions and community leadership structures.</p></div>
+      <div class="mandate-item"><h4>Community stability</h4><p>Local intelligence networks, early warning and non-intimidating engagement.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="model">
+  <div class="wrap">
+    <div class="model-head">
+      <div class="section-tag">Operating model</div>
+      <h2>A 3-layer model converts local knowledge into accountable field action.</h2>
+    </div>
+    <div class="model-steps">
+      <div class="model-step"><div class="model-num">01</div><h3>Community intelligence</h3><p>Trusted local observers, traditional structures and early-warning channels identify anomalies before escalation.</p></div>
+      <div class="model-step"><div class="model-num">02</div><h3>Technology verification</h3><p>Drones, sensors, GPS patrol trails and digital incident reports validate and timestamp field intelligence.</p></div>
+      <div class="model-step"><div class="model-num">03</div><h3>Coordinated response</h3><p>Command-desk triage, evidence capture and agency liaison support authorised response and a shared operating picture.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="services">
+  <div class="wrap">
+    <div class="services-head">
+      <div><div class="section-tag">Service portfolio</div><h2>Six service families, one complete partner.</h2></div>
+      <p>Prevention, protection and long-term capacity — structured beyond guard deployment.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card"><h3>Intelligence &amp; Risk</h3><p>Threat detection, community intelligence, pipeline corridor monitoring and territorial analysis.</p></div>
+      <div class="service-card"><h3>Consulting &amp; Advisory</h3><p>Pipeline protection strategy, crisis planning, cultural risk assessment and engagement frameworks.</p></div>
+      <div class="service-card"><h3>Technology Integration</h3><p>Drone surveillance, motion sensors, GPS patrol systems, CCTV and incident platforms.</p></div>
+      <div class="service-card"><h3>Asset Protection</h3><p>Pipelines, gas plants, flow stations, refineries, storage, routes and boundary corridors.</p></div>
+      <div class="service-card"><h3>Devices &amp; Equipment</h3><p>Drones, sensors, patrol boats, GPS trackers, night vision, communications and PPE.</p></div>
+      <div class="service-card"><h3>Training &amp; Capacity</h3><p>Pipeline surveillance, riverine navigation, intelligence gathering and emergency response.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="coverage">
+  <div class="wrap coverage-grid">
+    <div>
+      <div class="section-tag" style="color:var(--gold-bright)">Asset coverage</div>
+      <h2>Initial engagement across Edo's oil-producing LGAs.</h2>
+      <p class="lead">Beginning with focused local government areas strategically selected for their oil, gas and associated economic assets — with a phased rollout to additional LGAs as the programme progresses.</p>
+      <div class="coverage-areas" id="coverageAreasHome">
+        <span>Ikpoba-Okha</span>
+        <span>Orhionmwon</span>
+        <span>Uhunmwonde</span>
+        <span>Ovia North-East</span>
+        <span>Egor</span>
+        <span>Ovia South-West</span>
+        <span>Oredo</span>
+      </div>
+    </div>
+    <div class="coverage-assets">
+      <h4>Included asset classes</h4>
+      <p>Oil pipelines · Gas pipelines · Flow stations · Gas plants · Refineries · Storage facilities · Riverine access routes · Boundary corridors</p>
+    </div>
+    <p class="coverage-note"><strong>Note:</strong> Final corridors and asset profiles for each LGA will be jointly selected with Government and asset owners. As the programme expands, additional local government areas across Edo State will be added to the engagement footprint.</p>
+  </div>
+</section>
+
+<section class="alignment">
+  <div class="wrap">
+    <div class="rule"></div>
+    <blockquote>"ISN is designed to complement — not replace — statutory security agencies, approved operators and existing security contractors. Enforcement remains with authorised institutions."</blockquote>
+    <cite>Institutional alignment statement</cite>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="wrap">
+    <div class="cta-box">
+      <h2>Ready to discuss protection for your assets?</h2>
+      <a href="contact.html" class="btn btn-primary">Contact the team</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="brand">
+          <img src="logo.png" alt="Igodomigodo Security Network logo" class="brand-logo">
+          <div class="brand-name">IGODOMIGODO<span>SECURITY NETWORK</span><em>(OBA GHATO KPERE)</em></div>
+        </a>
+        <p class="footer-address">169 Upper Ekewan Road, Benin City, Edo State, Nigeria</p>
+        <div class="footer-commitment">
+          <h6>Our commitment</h6>
+          <ul><li>Transparency</li><li>Accountability</li><li>Welfare</li></ul>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Navigate</h5>
+        <ul><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="services.html">Services</a></li><li><a href="coverage.html">Coverage</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="news.html">News</a></li><li><a href="contact.html">Contact</a></li></ul>
+      </div>
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <ul><li><a href="tel:08055566632">0805 556 6632</a></li><li><a href="mailto:info@igodomigodosecurity.com">info@igodomigodosecurity.com</a></li><li><a href="#">169 Upper Ekewan Road, Benin City, Edo State</a></li></ul>
+      </div>
+      <div class="footer-col">
+        <h5>Follow us</h5>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+          <a href="#" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+          <a href="#" aria-label="X (Twitter)"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Igodomigodo Security Network Limited. RC 9758429.</span>
+      <span>Benin City, Edo State · Nigeria</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+  const nav = document.getElementById('siteNav');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
+
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  window.addEventListener('DOMContentLoaded', () => {
+    gsap.to('.hero-eyebrow', {opacity:1, duration:0.6, delay:0.2});
+    gsap.to('.hero h1 .line', {y:0, duration:0.9, stagger:0.12, ease:'power3.out', delay:0.35});
+    gsap.to('.hero-sub', {opacity:1, duration:0.7, delay:0.9});
+    gsap.to('.hero-actions', {opacity:1, duration:0.7, delay:1.1});
+  });
+
+  gsap.utils.toArray('.model-step').forEach((step, i) => {
+    gsap.from(step, {opacity:0, y:24, duration:0.7, ease:'power2.out', scrollTrigger:{trigger:step, start:'top 80%'}, delay: i * 0.08});
+  });
+
+  const themeToggle = document.getElementById('themeToggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      const isLight = document.documentElement.classList.toggle('light-mode');
+      try { localStorage.setItem('isn-theme', isLight ? 'light' : 'dark'); } catch(e){}
+    });
+  }
+</script>
+
+<script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCxsU8TQ0xI67ZZOYDqf9_H8UyoBvgJ7pQ",
+    authDomain: "security-f325d.firebaseapp.com",
+    projectId: "security-f325d",
+    storageBucket: "security-f325d.firebasestorage.app",
+    messagingSenderId: "421538949121",
+    appId: "1:421538949121:web:eb9aa79d286b2d6d2f7800"
+  };
+
+  try {
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    db.collection('stats').get()
+      .then(snap => {
+        const grid = document.getElementById('statsGrid');
+        if (snap.empty){ grid.innerHTML = '<div class="stats-empty">Stats not configured yet.</div>'; return; }
+        const items = [];
+        snap.forEach(d => items.push(d.data()));
+        items.sort((a, b) => {
+          const ao = (typeof a.order === 'number') ? a.order : 9999;
+          const bo = (typeof b.order === 'number') ? b.order : 9999;
+          return ao - bo;
+        });
+        grid.innerHTML = '';
+        const counters = [];
+        items.forEach(s => {
+          const num = parseInt(s.num, 10);
+          const suffix = s.suffix || '';
+          const el = document.createElement('div');
+          el.className = 'stat';
+          el.innerHTML = `<div class="stat-num">${isNaN(num) ? (s.num||'') + suffix : '0' + suffix}</div><div class="stat-label"></div>`;
+          el.querySelector('.stat-label').textContent = s.label || '';
+          grid.appendChild(el);
+          if (!isNaN(num)) counters.push({el: el.querySelector('.stat-num'), target: num, suffix});
+        });
+        counters.forEach(c => {
+          ScrollTrigger.create({
+            trigger: c.el, start: 'top 85%', once: true,
+            onEnter: () => {
+              gsap.fromTo(c.el, {innerText:0}, {
+                innerText:c.target, duration:1.4, ease:'power1.out', snap:{innerText:1},
+                onUpdate(){ c.el.innerText = Math.floor(c.el.innerText) + c.suffix; },
+                onComplete(){ c.el.innerText = c.target + c.suffix; }
+              });
+            }
+          });
+        });
+      })
+      .catch(err => {
+        document.getElementById('statsGrid').innerHTML = '<div class="stats-empty">Unable to load stats right now.</div>';
+        console.error(err);
+      });
+
+    db.collection('coverage_areas').get()
+      .then(snap => {
+        // If Firestore empty, keep the built-in HTML fallback (7 LGAs).
+        if (snap.empty) return;
+        const items = [];
+        snap.forEach(d => items.push(d.data()));
+        items.sort((a, b) => {
+          const ao = (typeof a.order === 'number') ? a.order : 9999;
+          const bo = (typeof b.order === 'number') ? b.order : 9999;
+          return ao - bo;
+        });
+        const wrap = document.getElementById('coverageAreasHome');
+        wrap.innerHTML = '';
+        items.forEach(a => { const s = document.createElement('span'); s.textContent = a.name || ''; wrap.appendChild(s); });
+      })
+      .catch(err => console.error('coverage preview', err));
+  } catch(e){
+    console.error('Firebase init failed:', e);
+  }
+</script>
+</body>
+</html>
